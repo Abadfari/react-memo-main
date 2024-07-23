@@ -14,7 +14,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
 
   const navigate = useNavigate();
   const gameSeconds = gameDurationMinutes * 60 + gameDurationSeconds;
-  const [userData, setuserData] = useState({
+  const [userData, setUserData] = useState({
     name: "",
     time: gameSeconds,
   });
@@ -22,7 +22,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
   const handleInputChange = e => {
     const { name, value } = e.target;
 
-    setuserData({
+    setUserData({
       ...userData,
       [name]: value,
     });
