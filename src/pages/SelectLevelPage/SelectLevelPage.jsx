@@ -27,13 +27,19 @@ export function SelectLevelPage() {
         </ul>
         <div className={styles.modeButton}>
           <input
-            className={styles.hiddenCheckbox}
+            className={styles.custom}
             type="checkbox"
             checked={checked}
+            value="yes"
             onChange={() => setChecked(!checked)}
-            id="threeMistakes"
+            id="easyMode"
           />
-          <label htmlFor="threeMistakes">Три ошибки</label>
+          <label htmlFor="easyMode">Легкий режим (3 попытки)</label>
+        </div>
+        <div className={styles.leaderboardLinkBox}>
+          <Link to={`/leaderboard`} className={styles.leaderboardLink}>
+            Перейти к лидерборду
+          </Link>
         </div>
       </div>
     </div>
