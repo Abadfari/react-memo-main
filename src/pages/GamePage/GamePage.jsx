@@ -4,11 +4,7 @@ import { Cards } from "../../components/Cards/Cards";
 
 export function GamePage() {
   const { pairsCount } = useParams();
-  const { isGameMode } = useParams();
+  const { isEasyMode } = useParams();
 
-  return (
-    <>
-      <Cards pairsCount={parseInt(pairsCount, 10)} previewSeconds={5} isGameMode={isGameMode}></Cards>
-    </>
-  );
+  return <Cards pairsCount={parseInt(pairsCount, 10)} previewSeconds={5} isEasyMode={isEasyMode} />;
 }

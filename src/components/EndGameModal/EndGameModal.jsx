@@ -8,15 +8,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { addLeaders } from "../../api/api";
 
-export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick }) {
-  const { isGameMode } = useParams();
+export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, onClick, achievements }) {
   const { pairsCount } = useParams();
+  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
   const gameSeconds = gameDurationMinutes * 60 + gameDurationSeconds;
   const [userData, setUserData] = useState({
     name: "",
     time: gameSeconds,
+    achievements,
   });
 
   const handleInputChange = e => {
@@ -30,19 +31,14 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
 
   async function handleAddUser(e) {
     e.preventDefault();
-    try {
-      await addLeaders(userData).then(data => {
-        navigate(`/leaderboard`);
-      });
-    } catch (error) {
-      alert(error.message);
+    if (!userData.name.trim()) {
+      setError("Введите имя");
+      return;
     }
-  }
-  async function handleAddUserButton(e) {
-    e.preventDefault();
     try {
       await addLeaders(userData).then(data => {
         onClick();
+        navigate(`/leaderboard`);
       });
     } catch (error) {
       alert(error.message);
@@ -69,7 +65,7 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
     <div className={styles.modal}>
       <img className={styles.image} src={imgSrc} alt={imgAlt} />
       <h2 className={styles.title}>{title}</h2>
-      {isGameMode === "false" && pairsCount === "9" && isWon ? (
+      {pairsCount === "9" && isWon ? (
         <form className={styles.form}>
           <input
             className={styles.nameInput}
@@ -80,24 +76,23 @@ export function EndGameModal({ isWon, gameDurationSeconds, gameDurationMinutes, 
             id="formUser"
             placeholder="Пользователь"
           />
+          <Button onClick={handleAddUser}>Отправить</Button>
+          <div>{error}</div>
         </form>
       ) : null}
       <p className={styles.description}>Затраченное время:</p>
       <div className={styles.time}>
         {gameDurationMinutes.toString().padStart("2", "0")}.{gameDurationSeconds.toString().padStart("2", "0")}
       </div>
-      {isGameMode === "false" && pairsCount === "9" && isWon ? (
+      <Button onClick={startTheGame}>Начать сначала</Button>
+      {pairsCount === "9" && isWon && (
         <>
-          <Button onClick={handleAddUserButton}>Начать сначала</Button>
           <div onClick={handleAddUser} className={styles.leaderboardLink}>
             Перейти к лидерборду
           </div>
         </>
-      ) : (
-        <>
-          <Button onClick={startTheGame}>Начать сначала</Button>
-        </>
       )}
+      ;
     </div>
   );
 }
